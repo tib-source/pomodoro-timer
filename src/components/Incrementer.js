@@ -1,16 +1,18 @@
 import React from "react";
 
-function Incrementer({ title, setState, state }) {
+function Incrementer({ paused, title, setState, state }) {
   const lower = title.toLowerCase();
 
   const handleClick = (type) => {
-    switch (type) {
-      case -1:
-        return setState(state - 1);
-      case 1:
-        return setState(state + 1);
-      default:
-        break;
+    if(!paused){
+        switch (type) {
+            case -1:
+            return setState(state - 1);
+            case 1:
+            return setState(state + 1);
+            default:
+            break;
+        }
     }
   };
   return (
@@ -21,7 +23,7 @@ function Incrementer({ title, setState, state }) {
           onClick={() => handleClick(-1)}
           id={`${lower}-increment`}
         ></button>
-        <input type="number" value={state} name="break" id={`${lower}-length`} />
+        <input type="number" defaultValue={state} name="break" id={`${lower}-length`} />
         <button
           onClick={() => handleClick(1)}
           id={`${lower}-decrement`}
