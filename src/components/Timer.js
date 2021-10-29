@@ -131,7 +131,7 @@ function Timer() {
         });
         if (!activeBreak) {
           setDisplayTimer((prev) => {
-            if (sessionTimer + ammount == 0) {
+            if (sessionTimer + ammount === 0) {
               return sessionTimer;
             }
             return sessionTimer + ammount;
