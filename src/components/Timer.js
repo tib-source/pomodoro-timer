@@ -4,14 +4,14 @@ import Incrementer from "./Incrementer";
 function Timer() {
   const [timer, setTimer] = useState(25);
   const [_break, setBreak] = useState(5);
-  const [fullTimer, setFullTimer] = useState(timer*60);
-  const [activeBreak, setActiveBreak] = useState(false)
+  const [fullTimer, setFullTimer] = useState(timer * 60);
+  const [activeBreak, setActiveBreak] = useState(false);
   // let minutes = timer
   // let seconds = 0
   const [paused, setPaused] = useState(true);
 
   const formatTimer = () => {
-    //  return `${String(minutes.toString()).padStart(2,0)}:${String(seconds.toString()).padStart(2,0)}`
+    //
     const minutes = Math.floor(fullTimer / 60);
     const seconds = fullTimer % 60;
     return `${minutes.toString().padStart(2, "0")}:${seconds
@@ -19,14 +19,15 @@ function Timer() {
       .padStart(2, "0")}`;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const decrement = () => {
     if (fullTimer === 0) {
       return;
     } else {
       setFullTimer((prev) => {
         if (prev === 1) {
-            setActiveBreak(true)
-          reset(activeBreak) // if activeBreak is true -> timer will reset to 25 minutes else it will reset to 5 minutes
+          setActiveBreak(true);
+          reset(activeBreak); // if activeBreak is true -> timer will reset to 25 minutes else it will reset to 5 minutes
         } else {
           return prev - 1;
         }
@@ -39,9 +40,11 @@ function Timer() {
       setBreak(5);
       setTimer(25);
       setFullTimer(timer * 60);
-      setActiveBreak(false)
-      return 'reset complete'
+      setActiveBreak(false);
+      setPaused(true);
+      return "reset complete";
     }
+    setActiveBreak(true);
     setFullTimer(_break * 60);
   };
 
@@ -56,7 +59,7 @@ function Timer() {
     }
 
     return () => clearInterval(timerId);
-  }, [paused, decrement]);
+  }, [paused, decrement, fullTimer]);
 
   const handleStartStop = (event) => {
     if (paused) {
@@ -74,8 +77,6 @@ function Timer() {
     // }
   };
 
-  
-
   return (
     <div className="contianer">
       <div className="top">
@@ -84,25 +85,22 @@ function Timer() {
           state={timer}
           setState={setTimer}
           title={"Session"}
-          setFullTimer={setFullTimer}
-
         />
         <Incrementer
           paused={paused}
           state={_break}
           setState={setBreak}
           title={"Break"}
-          setFullTimer={setFullTimer}
         />
       </div>
       <div className="timer">
-        <h2 id='timer-label'>{activeBreak ? 'Break Time!' : 'Focus Time!'}</h2>
+        <h2 id="timer-label">{activeBreak ? "Break Time!" : "Focus Time!"}</h2>
         <h1 id="time-left">{formatTimer()}</h1>
         <div className="timer__butons">
           <button onClick={(e) => handleStartStop(e)} id="start_stop">
             {paused ? "Start" : "Pause"}
           </button>
-          <button onClick={()=>reset()} id="reset">
+          <button onClick={() => reset()} id="reset">
             Reset
           </button>
         </div>
