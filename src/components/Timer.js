@@ -78,7 +78,7 @@ function Timer() {
   };
 
   return (
-    <div className="contianer">
+    <div className="container">
       <div className="top">
         <Incrementer
           paused={paused}

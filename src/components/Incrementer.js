@@ -23,7 +23,7 @@ function Incrementer({ update, paused, title, setState, state }) {
     }
   };
   return (
-    <div>
+    <div className="laboom">
       <span id={`${lower}-label`}>{title} Length</span>
       <div className="button">
         <button onClick={() => handleIncrement(-1)} id={`${lower}-increment`}>
