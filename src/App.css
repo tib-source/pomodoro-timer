@@ -33,6 +33,7 @@ body {
 
 .top span {
   font-weight: 700;
+  filter: drop-shadow(1px 1px 1px #00b6bc);
 }
 
 .button {
@@ -46,6 +47,9 @@ body {
   padding: 0.2em;
   font-size: inherit;
   text-align: center;
+  outline: none;
+  border: none;
+  box-shadow: 3px 3px 1px #00b6bc;
 }
 
 .button button {
@@ -53,6 +57,8 @@ body {
   font-size: inherit;
   background-color: #e4f4f3;
   box-shadow: 2px 2px 1px #00b6bc;
+  color: #00a1a7;
+  font-weight: 700;
 }
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
@@ -74,11 +80,13 @@ input[type="number"] {
   margin: 0;
   padding: 0;
   margin-bottom: -10px;
+  filter: drop-shadow(1px 1px 1px #00b6bc);
 }
 .timer h1 {
   margin: 0;
   padding: 0;
   font-size: 5em;
+  filter: drop-shadow(1px 1px 1px #00b6bc);
 }
 
 .timer button {
@@ -88,4 +96,6 @@ input[type="number"] {
   background-color: #e4f4f3;
   border-radius: 4px;
   box-shadow: 5px 5px 1px #00b6bc;
+  color: #00a1a7;
+  font-weight: 700;
 }
