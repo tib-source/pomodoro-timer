@@ -19,6 +19,8 @@ function Timer() {
       .padStart(2, "0")}`;
   };
 
+  const playAudio = () => {};
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const decrement = () => {
     if (displayTimer === 0) {
@@ -27,11 +29,15 @@ function Timer() {
       setDisplayTimer((prev) => {
         if (prev === 1) {
           // if activeBreak is true -> timer will reset to 25 minutes else it will reset to 5 minutes
-          if (activeBreak) {
-            reset(true, "Session");
-          } else {
-            reset(true, "Break");
-          }
+          setTimeout(() => {
+            if (activeBreak) {
+              return reset(true, "Session");
+            } else {
+              playAudio();
+              return reset(true, "Break");
+            }
+          }, 1000);
+          return 0;
         } else {
           return prev - 1;
         }
@@ -42,10 +48,10 @@ function Timer() {
   const reset = (breakSession = false, type = false) => {
     if (breakSession === false) {
       setSessionTimer(25 * 60);
+      setDisplayTimer(25 * 60);
       setBreakTimer(5 * 60);
       setActiveBreak(false);
       setPaused(true);
-      setDisplayTimer(sessionTimer);
       return "reset complete";
     } else {
       if ((type = "Break")) {
@@ -95,11 +101,13 @@ function Timer() {
             return prev;
           }
           if (prev + ammount > 60 * 60) {
-            console.log("object");
             return prev;
           }
           return prev + ammount;
         });
+        if (activeBreak) {
+          setDisplayTimer(breakTimer);
+        }
       } else {
         setSessionTimer((prev) => {
           if (prev + ammount <= 0) {
@@ -110,12 +118,15 @@ function Timer() {
           }
           return prev + ammount;
         });
+        if (!activeBreak) {
+          setDisplayTimer((prev) => {
+            if (sessionTimer + ammount == 0) {
+              return sessionTimer;
+            }
+            return sessionTimer + ammount;
+          });
+        }
       }
-    }
-    if (activeBreak) {
-      setDisplayTimer(breakTimer + ammount);
-    } else {
-      setDisplayTimer(sessionTimer + ammount);
     }
   };
   return (
