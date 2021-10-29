@@ -99,3 +99,16 @@ input[type="number"] {
   color: #00a1a7;
   font-weight: 700;
 }
+
+@media (max-width: 500px) {
+  .App {
+    width: 90vw;
+    box-shadow: 3px 3px 1px #00b6bc;
+  }
+  .top {
+    gap: 1em;
+  }
+  .timer h1 {
+    font-size: 80px;
+  }
+}
