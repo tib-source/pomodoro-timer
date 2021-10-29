@@ -9,7 +9,7 @@ function Incrementer({ handleIncrement, paused, title, setState, state }) {
       <div className="button">
         <button
           onClick={() => handleIncrement(-60, title)}
-          id={`${lower}-increment`}
+          id={`${lower}-decrement`}
         >
           -
         </button>
@@ -22,7 +22,7 @@ function Incrementer({ handleIncrement, paused, title, setState, state }) {
         />
         <button
           onClick={() => handleIncrement(60, title)}
-          id={`${lower}-decrement`}
+          id={`${lower}-increment`}
         >
           +
         </button>

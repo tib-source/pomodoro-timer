@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Incrementer from "./Incrementer";
-
 function Timer() {
   const [sessionTimer, setSessionTimer] = useState(25 * 60);
   const [breakTimer, setBreakTimer] = useState(5 * 60);
   const [activeBreak, setActiveBreak] = useState(false);
   const [displayTimer, setDisplayTimer] = useState(sessionTimer);
+  const Beep = useRef(null);
   // let minutes = timer
   // let seconds = 0
   const [paused, setPaused] = useState(true);
@@ -19,7 +19,16 @@ function Timer() {
       .padStart(2, "0")}`;
   };
 
-  const playAudio = () => {};
+  const playAudio = () => {
+    const audio = Beep.current;
+    audio.currentTime = 0;
+    audio.play();
+    console.log(audio);
+    setTimeout(() => {
+      audio.pause();
+      audio.currentTime = 0;
+    }, 3000);
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const decrement = () => {
@@ -47,6 +56,8 @@ function Timer() {
 
   const reset = (breakSession = false, type = false) => {
     if (breakSession === false) {
+      Beep.current.pause();
+      Beep.current.currentTime = 0;
       setSessionTimer(25 * 60);
       setDisplayTimer(25 * 60);
       setBreakTimer(5 * 60);
@@ -54,7 +65,7 @@ function Timer() {
       setPaused(true);
       return "reset complete";
     } else {
-      if ((type = "Break")) {
+      if (type === "Break") {
         setActiveBreak(true);
         setDisplayTimer(breakTimer);
       } else {
@@ -156,6 +167,7 @@ function Timer() {
             Reset
           </button>
         </div>
+        <audio src="./beep.mp3" id="beep" ref={Beep}></audio>
       </div>
     </div>
   );
