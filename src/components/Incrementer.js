@@ -1,33 +1,36 @@
 import React from "react";
 
-function Incrementer({ paused, title, setState, state }) {
+function Incrementer({ setFullTimer, paused, title, setState, state }) {
   const lower = title.toLowerCase();
 
-  const handleClick = (type) => {
-    if(!paused){
+  const handleIncrement = (type) => {
+    if(paused){
         switch (type) {
             case -1:
-            return setState(state - 1);
+            setState(state-1);
+            break
             case 1:
-            return setState(state + 1);
+            setState(state+1);
+            break
             default:
-            break;
-        }
-    }
+              break
+            }
+      }
+
   };
   return (
     <div>
       <span id={`${lower}-label`}>{title} Length</span>
       <div className="button">
         <button
-          onClick={() => handleClick(-1)}
+          onClick={() => handleIncrement(-1)}
           id={`${lower}-increment`}
-        ></button>
-        <input type="number" defaultValue={state} name="break" id={`${lower}-length`} />
+        >+</button>
+        <input type="number" value={state} name="break" id={`${lower}-length`} readOnly/>
         <button
-          onClick={() => handleClick(1)}
+          onClick={() => handleIncrement(1)}
           id={`${lower}-decrement`}
-        ></button>
+        >-</button>
       </div>
     </div>
   );
