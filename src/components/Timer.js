@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import Incrementer from "./Incrementer";
 
 function Timer() {
-  const [timer, setTimer] = useState(25);
-  const [_break, setBreak] = useState(5);
-  const [fullTimer, setFullTimer] = useState(timer * 60);
+  const [sessionTimer, setSessionTimer] = useState(25 * 60);
+  const [breakTimer, setBreakTimer] = useState(5 * 60);
   const [activeBreak, setActiveBreak] = useState(false);
+  const [displayTimer, setDisplayTimer] = useState(sessionTimer);
   // let minutes = timer
   // let seconds = 0
   const [paused, setPaused] = useState(true);
 
   const formatTimer = () => {
     //
-    const minutes = Math.floor(fullTimer / 60);
-    const seconds = fullTimer % 60;
+    const minutes = Math.floor(displayTimer / 60);
+    const seconds = displayTimer % 60;
     return `${minutes.toString().padStart(2, "0")}:${seconds
       .toString()
       .padStart(2, "0")}`;
@@ -21,13 +21,17 @@ function Timer() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const decrement = () => {
-    if (fullTimer === 0) {
+    if (displayTimer === 0) {
       return;
     } else {
-      setFullTimer((prev) => {
+      setDisplayTimer((prev) => {
         if (prev === 1) {
-          setActiveBreak(true);
-          reset(activeBreak); // if activeBreak is true -> timer will reset to 25 minutes else it will reset to 5 minutes
+          // if activeBreak is true -> timer will reset to 25 minutes else it will reset to 5 minutes
+          if (activeBreak) {
+            reset(true, "Session");
+          } else {
+            reset(true, "Break");
+          }
         } else {
           return prev - 1;
         }
@@ -35,17 +39,23 @@ function Timer() {
     }
   };
 
-  const reset = (breakSession = false) => {
-    if (!breakSession) {
-      setBreak(5);
-      setTimer(25);
-      setFullTimer(timer * 60);
+  const reset = (breakSession = false, type = false) => {
+    if (breakSession === false) {
+      setSessionTimer(25 * 60);
+      setBreakTimer(5 * 60);
       setActiveBreak(false);
       setPaused(true);
+      setDisplayTimer(sessionTimer);
       return "reset complete";
+    } else {
+      if ((type = "Break")) {
+        setActiveBreak(true);
+        setDisplayTimer(breakTimer);
+      } else {
+        setActiveBreak(false);
+        setDisplayTimer(sessionTimer);
+      }
     }
-    setActiveBreak(true);
-    setFullTimer(_break * 60);
   };
 
   useEffect(() => {
@@ -53,13 +63,13 @@ function Timer() {
     if (!paused) {
       timerId = setInterval(decrement, 1000);
     } else {
-      if (fullTimer !== "25:00") {
+      if (displayTimer !== "25:00") {
         clearInterval();
       }
     }
 
     return () => clearInterval(timerId);
-  }, [paused, decrement, fullTimer]);
+  }, [paused, decrement, displayTimer]);
 
   const handleStartStop = (event) => {
     if (paused) {
@@ -77,20 +87,51 @@ function Timer() {
     // }
   };
 
+  const handleIncrement = (ammount, type) => {
+    if (paused) {
+      if (type === "Break") {
+        setBreakTimer((prev) => {
+          if (prev + ammount <= 0) {
+            return prev;
+          }
+          if (prev + ammount > 60 * 60) {
+            console.log("object");
+            return prev;
+          }
+          return prev + ammount;
+        });
+      } else {
+        setSessionTimer((prev) => {
+          if (prev + ammount <= 0) {
+            return prev;
+          }
+          if (prev + ammount > 60 * 60) {
+            return prev;
+          }
+          return prev + ammount;
+        });
+      }
+    }
+    if (activeBreak) {
+      setDisplayTimer(breakTimer + ammount);
+    } else {
+      setDisplayTimer(sessionTimer + ammount);
+    }
+  };
   return (
     <div className="container">
       <div className="top">
         <Incrementer
           paused={paused}
-          state={timer}
-          setState={setTimer}
+          state={Math.floor(sessionTimer / 60)}
+          handleIncrement={handleIncrement}
           title={"Session"}
         />
         <Incrementer
           paused={paused}
-          state={_break}
-          setState={setBreak}
+          state={Math.floor(breakTimer / 60)}
           title={"Break"}
+          handleIncrement={handleIncrement}
         />
       </div>
       <div className="timer">
